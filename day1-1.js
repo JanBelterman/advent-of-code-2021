@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-fs.readFile('input.txt', 'utf-8', function(err, data) {
+fs.readFile('day1.txt', 'utf-8', function(err, data) {
     data = data.split('\n')
     data = data.map(x => parseInt(x))
 
