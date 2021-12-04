@@ -73,6 +73,7 @@ function isDrawnInEntirety(list) {
 }
 
 function checkForWin(grids) {
+    let winningIdx = []
     for (var i = 0; i < grids.length; i++) {
         let grid = grids[i]
         for (var j = 0; j < gridSize; j++) {
@@ -80,25 +81,31 @@ function checkForWin(grids) {
             let col = grid.map(c => c[j])
             if (isDrawnInEntirety(col)) {
                 console.log('Entire column found')
-                return grid
+                winningIdx.push(i)
+                continue
             }
             if (isDrawnInEntirety(row)) {
                 console.log('Entire row found')
-                return grid
+                winningIdx.push(i)
             }
         }
     }
+    return winningIdx
 }
 
 function playGame(grids, numbersDrawn) {
-    // console.log(grids[0])
     for (i in numbersDrawn) {
         processTurn(grids, numbersDrawn[i])
-        // console.log(grids[0])
-        let winningGrid = checkForWin(grids)
-        if (winningGrid) return {
-            winningGrid,
-            finalNumberDrawn: numbersDrawn[i]
+        let winningGrids = checkForWin(grids)
+        for (var j in winningGrids) {
+            let losing = grids[winningGrids[j]]
+            grids.splice(winningGrids[j], 1)
+            if (grids.length === 0) {
+                return {
+                    winningGrid: losing,
+                    finalNumberDrawn: numbersDrawn[i]
+                }
+            }
         }
     }
 }
@@ -115,6 +122,8 @@ function calculateScore(numbersNotDrawn, finalNumberDrawn) {
 
 function getNumbersNotDrawn(grid) {
     let notDrawnFromGrid = []
+    // console.log(grid)
+    // console.log(grid[1])
     for (var j = 0; j < gridSize; j++) {
         let row = grid[j]
         for (var n = 0; n < gridSize; n++) {
